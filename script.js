@@ -1,63 +1,94 @@
-// Get all the necessary elements from the HTML
+// --- 1. Element Selection ---
+const dial = document.getElementById('dial');
 const secondHand = document.getElementById('second-hand');
 const minuteHand = document.getElementById('minute-hand');
 const timeDisplay = document.getElementById('time-display');
 const startStopBtn = document.getElementById('startStopBtn');
 const resetBtn = document.getElementById('resetBtn');
 
-// State variables to manage the stopwatch
-let timerInterval = null; // To hold the setInterval function
-let elapsedTime = 0;      // Time in milliseconds
-let startTime = 0;        // The timestamp when the watch was started
-let isRunning = false;    // Boolean to check if the watch is running
+// --- 2. State Variables ---
+let timerInterval = null;
+let elapsedTime = 0;
+let startTime = 0;
+let isRunning = false;
 
-// Function to start or stop the watch
+// --- 3. Functions ---
+
+/**
+ * Creates the watch face (ticks and numbers) dynamically using JavaScript.
+ * This runs once when the page loads.
+ */
+function createWatchFace() {
+    // Create 60 tick marks
+    for (let i = 0; i < 60; i++) {
+        const tick = document.createElement('div');
+        tick.classList.add('tick');
+        if (i % 5 === 0) tick.classList.add('large'); // Make hour marks larger
+        tick.style.transform = `rotate(${i * 6}deg)`; // 360 / 60 = 6 degrees per tick
+        dial.appendChild(tick);
+    }
+
+    // Create 12 Roman numerals
+    const romanNumerals = ['XII', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI'];
+    for (let i = 0; i < 12; i++) {
+        const numberContainer = document.createElement('div');
+        numberContainer.classList.add('number');
+        const rotation = i * 30; // 360 / 12 = 30 degrees per number
+        
+        numberContainer.style.setProperty('--rotation', rotation);
+        numberContainer.style.transform = `rotate(${rotation}deg)`;
+        
+        const numberSpan = document.createElement('span');
+        numberSpan.textContent = romanNumerals[i];
+        
+        numberContainer.appendChild(numberSpan);
+        dial.appendChild(numberContainer);
+    }
+}
+
+/**
+ * Starts or stops the stopwatch.
+ */
 function startStop() {
     if (isRunning) {
-        // --- STOP THE WATCH ---
         clearInterval(timerInterval);
         startStopBtn.textContent = 'Start';
     } else {
-        // --- START THE WATCH ---
-        // To handle pausing, we set the start time relative to the already elapsed time
         startTime = Date.now() - elapsedTime;
-        // Update the time every 10 milliseconds for a smooth animation
-        timerInterval = setInterval(updateTime, 10);
+        timerInterval = setInterval(updateTime, 10); // Update every 10ms for smooth animation
         startStopBtn.textContent = 'Stop';
     }
-    // Toggle the running state
     isRunning = !isRunning;
 }
 
-// Function to reset the watch
+/**
+ * Resets the stopwatch to zero.
+ */
 function reset() {
-    // Stop the timer
     clearInterval(timerInterval);
-    // Reset all state variables
     elapsedTime = 0;
     isRunning = false;
-    // Update the UI to its initial state
     updateDisplay();
     updateHands();
     startStopBtn.textContent = 'Start';
 }
 
-// This function is called every 10ms to update the UI
+/**
+ * Updates the elapsed time. Called by setInterval.
+ */
 function updateTime() {
-    // Calculate the total elapsed time
-    const currentTime = Date.now();
-    elapsedTime = currentTime - startTime;
-
-    // Update the visual components
+    elapsedTime = Date.now() - startTime;
     updateDisplay();
     updateHands();
 }
 
-// Function to update the digital time display
+/**
+ * Updates the digital time display (00:00.00).
+ */
 function updateDisplay() {
     const minutes = Math.floor(elapsedTime / 60000);
     const seconds = Math.floor((elapsedTime % 60000) / 1000);
-    const milliseconds = Math.floor((elapsedTime % 1000) / 10); // Show two digits for ms
+    const milliseconds = Math.floor((elapsedTime % 1000) / 10);
 
     timeDisplay.textContent = 
         String(minutes).padStart(2, '0') + ':' +
@@ -65,25 +96,25 @@ function updateDisplay() {
         String(milliseconds).padStart(2, '0');
 }
 
-// Function to rotate the watch hands
+/**
+ * Rotates the watch hands based on the elapsed time.
+ */
 function updateHands() {
     const totalSeconds = elapsedTime / 1000;
     const totalMinutes = totalSeconds / 60;
 
-    // A full circle is 360 degrees
     const secondsDegrees = (totalSeconds / 60) * 360;
-    // The sub-dial is 30 minutes, so one full rotation is 30 minutes
-    const minutesDegrees = (totalMinutes / 30) * 360;
+    const minutesDegrees = (totalMinutes / 30) * 360; // 30-minute sub-dial
 
-    // Apply the rotation
     secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
     minuteHand.style.transform = `translateY(calc(-100% + 28%)) rotate(${minutesDegrees}deg)`;
 }
 
-// Attach the functions to the button click events
+// --- 4. Event Listeners and Initial Setup ---
 startStopBtn.addEventListener('click', startStop);
 resetBtn.addEventListener('click', reset);
 
-// Set the initial state on page load
+// Run these functions when the page loads to set everything up
+createWatchFace();
 updateDisplay();
 updateHands();
