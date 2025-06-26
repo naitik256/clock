@@ -1,132 +1,34 @@
-/* --- Original Styles --- */
 body {
-  background-color: #000;
-  color: #fff;
-  font-family: 'Poppins', sans-serif;
-  text-align: center;
-  margin: 0;
-  padding: 0;
-  transition: background-color 0.4s ease-in-out;
-}
-
-.container {
-  padding: 30px 20px;
-  max-width: 600px;
-  margin: auto;
-}
-
-h1 {
-  font-size: 2.5em;
-  margin-bottom: 20px;
-}
-
-/* This is the original digital stopwatch, which is now hidden by inline style in HTML.
-   We'll keep its style here just in case. */
-#stopwatch {
-  font-size: 3em;
-  margin: 20px 0;
-  font-weight: bold;
-}
-
-.controls button {
-  padding: 10px 25px;
-  font-size: 1em;
-  background-color: #00cec9;
-  color: black;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.controls button:hover {
-  background-color: #01b2b0;
-}
-
-#status {
-  margin-top: 20px;
-  font-weight: bold;
-  font-size: 1.1em;
-}
-
-.report {
-  margin-top: 40px;
-  text-align: left;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.report h3 {
-  margin-bottom: 10px;
-}
-
-.report ul {
-  list-style: none;
-  padding: 0;
-}
-
-.report li {
-  margin-bottom: 5px;
-  color: #ccc;
-}
-
-footer {
-  margin-top: 50px;
-  font-size: 0.9em;
-  color: #aaa;
-}
-
-footer a {
-  color: #00cec9;
-  text-decoration: none;
-}
-
-footer a:hover {
-  text-decoration: underline;
-}
-
-.info-section {
-  padding: 20px;
-  font-size: 0.9em;
-  max-width: 600px;
-  margin: 40px auto;
-  color: #ccc;
-  text-align: left;
-}
-
-.info-section ul {
-  padding-left: 20px;
-}
-
-.info-section h3 {
-  color: #00cec9;
-  margin-bottom: 10px;
-}
-
-
-/* ****************************************************** */
-/* ***** START: NEW STYLES FOR VINTAGE STOPWATCH ***** */
-/* ****************************************************** */
-
-.vintage-stopwatch-container {
-    margin: 20px auto;
+    background-color: #333;
+    color: #f0e6d2;
+    font-family: 'Cormorant Garamond', serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 280px; /* Ensures space for the watch */
+    min-height: 100vh;
+    margin: 0;
+}
+
+.app-container {
+    text-align: center;
+}
+
+h1 {
+    font-size: 3em;
+    font-weight: 700;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
 }
 
 .stopwatch-body {
-    width: 250px; /* Size of the watch */
-    height: 250px;
-    /* High-quality watch face image (without hands) */
+    width: 300px;
+    height: 300px;
     background-image: url('https://i.imgur.com/BAnKx33.png');
     background-size: contain;
-    background-repeat: no-repeat;
     background-position: center;
+    background-repeat: no-repeat;
     position: relative;
-    /* Creates a 3D effect with shadow */
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); 
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+    margin: 20px auto;
 }
 
 .dial {
@@ -139,30 +41,21 @@ footer a:hover {
     position: absolute;
     bottom: 50%;
     left: 50%;
-    /* This is CRUCIAL: it makes the hand rotate from its bottom center */
-    transform-origin: bottom center; 
+    transform-origin: bottom center;
     border-radius: 2px;
-    /* Smooth "tick" animation for the second hand. Your JS updates it every second. */
-    transition: transform 0.3s cubic-bezier(0.4, 1.5, 0.6, 1);
 }
 
 .second-hand {
     width: 2px;
     height: 45%;
-    background-color: #d13a3a; /* Red color for the second hand */
-    z-index: 3; /* To appear above the minute hand */
+    background-color: #d13a3a;
+    z-index: 3;
 }
 
-/* Positioning the minute hand on the small sub-dial */
 .minute-hand {
     width: 3px;
-    height: 20%; /* Length of the minute hand */
+    height: 20%;
     background-color: #333;
-    /* 
-      We use 'transform' to move the hand up to the sub-dial's center.
-      This is better than using 'top' and 'left' because it keeps the rotation axis correct.
-      'calc(-100% + 28%)' moves the hand up. You can tweak '28%' to perfectly align it.
-    */
     transform: translateY(calc(-100% + 28%));
     z-index: 2;
 }
@@ -171,14 +64,47 @@ footer a:hover {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     background-color: #333;
+    border: 2px solid #c5a15a;
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    z-index: 4; /* To appear on top of everything */
+    z-index: 4;
 }
 
-/* **************************************************** */
-/* *****  END: NEW STYLES FOR VINTAGE STOPWATCH *****  */
-/* **************************************************** */
+#time-display {
+    font-size: 2.5em;
+    margin-top: 10px;
+    letter-spacing: 2px;
+}
+
+.controls {
+    margin-top: 25px;
+}
+
+.controls button {
+    background-color: #c5a15a; /* Gold color */
+    color: #333;
+    border: 2px solid #a08244; /* Darker gold border */
+    padding: 12px 30px;
+    font-size: 1.2em;
+    font-family: 'Cormorant Garamond', serif;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 10px;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.controls button:hover {
+    background-color: #d1b17a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.controls button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
